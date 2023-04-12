@@ -5,8 +5,6 @@ function authenticateJWT(req, res, next) {
   
     if (authHeader) {
       const token = authHeader.split(' ')[1];
-        console.log(token)
-        console.log(process.env.JWT_Secret)
       jwt.verify(token, process.env.JWT_Secret , (err, user) => {
         if (err) {
             console.log(err);
