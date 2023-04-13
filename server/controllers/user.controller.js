@@ -32,13 +32,21 @@ router.get('/:id' , authenticateJWT , validateDbId , (req , res)=>{
     
 });
 
-router.post('/' , async (req , res)=> {
+router.post('/' , async (req , res ,next)=> {
     const user = req.body;
+    existingUser = await userCRUD.getUserbyEmail(user.email);
+    console.log(existingUser)
+    if(existingUser){
+        return res.status(403).json({error:'User already exists'})
+    }
+
+    else if(!existingUser){
     user.password = await hashPassword(user.password);
 
     await userCRUD.create(user).
     then(user => res.json(user)).
     catch(err => next(err));
+    }
 });
 
 router.put('/:id' , authenticateJWT , validateDbId , (req , res , next)=>{
