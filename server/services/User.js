@@ -1,4 +1,3 @@
-const bcrypt = require('bcrypt');
 exports.generateCrudMethods = Model => {
     return {
         getAll: () => Model.find(),
