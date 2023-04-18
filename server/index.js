@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('path');
 const cors = require('cors');
-
 
 
 const connectDb = require('./db.js');
@@ -9,6 +9,7 @@ const userRoutes = require('./controllers/user.controller.js');
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
+app.use('/uploadedImages', express.static(path.join(__dirname, 'uploadedImages')));
 app.use('/api/users' , userRoutes);
 
   

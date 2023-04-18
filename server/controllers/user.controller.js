@@ -1,7 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user.model');
+const path = require('path');
+const upload = require('../middleware/uploadImages');
 const {generateCrudMethods} = require('../services/User');
+const url = require('url');
 const userCRUD = generateCrudMethods(User);
 const {validateDbId , raiseRecord404Error,errorHandler} = require('../middleware/routesErrorHandling');
 require('dotenv').config();
@@ -99,6 +102,61 @@ router.post('/login' , async (req , res  , next)=>{
         res.status(200).json({token:token});
     }
 });
+
+router.put('/resetPassword/:id' , authenticateJWT , validateDbId , async (req , res , next)=>{
+    const id = req.params.id;
+    const user = req.body;
+    const password = user.password;
+    console.log(password)
+    const hashedPassword = await hashPassword(password);
+    user.password = hashedPassword;
+    console.log(hashedPassword)
+    const updatedUser = await userCRUD.update(id , user);
+    if(updatedUser){
+        res.json(updatedUser)
+    } else{
+        raiseRecord404Error(req , res);
+    }
+});
+
+router.post('/profilePicture/:id' , authenticateJWT , upload.single("profilePicture")  , (req , res , next)=>{
+    const file = req.file;
+    console.log("hello" , file);
+    const id = req.params.id;
+    const filePath = file.path;
+    userCRUD.update(id , {profilePicture:filePath}).
+    then(user => {
+        if(user){
+        res.json(user)
+        }
+        else{
+            raiseRecord404Error(req , res);
+        }
+    }).catch(err => next(err));
+
+});
+
+router.get('/profilePicture/:id' , authenticateJWT , validateDbId , (req , res , next)=>{
+    const id = req.params.id
+    userCRUD.getByID(id).
+    then(user => {
+        if(user){
+        const serverHost = 'http://localhost:3001/uploadedImages/'
+        const imagePath = path.parse(user.profilePicture);
+        const imageFileName = imagePath.base;
+        const imageFileUrl = serverHost + imageFileName;
+        console.log(imageFileUrl)
+        console.log("File has been sent")
+        res.json({
+            imageFileUrl:imageFileUrl,
+        })
+        }
+        else{
+            raiseRecord404Error(req , res);
+        }
+    })
+});
+    
 
 module.exports = router;
 
