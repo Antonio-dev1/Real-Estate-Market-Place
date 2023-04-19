@@ -6,12 +6,13 @@ const cors = require('cors');
 
 const connectDb = require('./db.js');
 const userRoutes = require('./controllers/user.controller.js');
+const propertyRoutes = require('./controllers/property.controller.js');
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 app.use('/uploadedImages', express.static(path.join(__dirname, 'uploadedImages')));
 app.use('/api/users' , userRoutes);
-
+app.use('/api/properties' , propertyRoutes);
   
 // Connecting to the database
 connectDb().then(() => {

@@ -4,7 +4,6 @@ const User = require('../models/user.model');
 const path = require('path');
 const upload = require('../middleware/uploadImages');
 const {generateCrudMethods} = require('../services/User');
-const url = require('url');
 const userCRUD = generateCrudMethods(User);
 const {validateDbId , raiseRecord404Error,errorHandler} = require('../middleware/routesErrorHandling');
 require('dotenv').config();

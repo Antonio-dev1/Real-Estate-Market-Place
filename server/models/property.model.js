@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const users = require('./user.model');
 module.exports = mongoose.model('properties' , {
     title: {type: String , required: true},
     description : {type: String , required: true},
@@ -11,11 +10,5 @@ module.exports = mongoose.model('properties' , {
     imageurls:[String],
     location:{type:String , required:true},
     creationDate:{type:Date , default: Date.now},
-    agent:{
-        agent_id:{type:mongoose.Schema.Types.ObjectId , ref:'users'},
-        name:{type:String , required:true},
-        email:{type:String , required:true},
-        profilePicture:{type:String , required:true},
-        phoneNumber:{type:String , required:true},
-    }
+    userId:{type:mongoose.Schema.Types.ObjectId , ref:'users' , required:true}
 });
