@@ -43,6 +43,24 @@ router.post('/' , authenticateJWT, (req , res ,next)=> {
     catch(err => next(err));
 })
 
+router.delete('/:id' , authenticateJWT , validateDbId , (req , res , next)=>{
+    const id = req.params.id;
+    propertyCRUD.delete(id).
+    then(property => {
+        if(property){
+            res.json(property)
+
+        }
+        else{
+            raiseRecord404Error(req , res);
+        }
+    }).
+    catch(err => {
+        console.log(err, 'error')
+
+    })
+});
+
 
 router.put('/:id' , authenticateJWT , validateDbId , (req , res , next)=>{
     const id = req.params.id;
@@ -62,8 +80,21 @@ router.put('/:id' , authenticateJWT , validateDbId , (req , res , next)=>{
 
 
 router.post('/upload' , authenticateJWT , upload.array('propertyPhotos' , 20) , (req , res , next)=>{
-    if(req.file){
-        res.json(req.file)
+    const serverHost = 'http://localhost:3001/uploadedImages/'
+    const files = req.files;
+    console.log("hello" , files)
+    const filePaths = [];
+    if(files){
+        for (const file in files ){
+             filePaths.push(serverHost + files[file].filename) 
+        }
+
+        res.json({
+            message : 'Files uploaded successfully',
+            filePaths : filePaths
+        });
+    } else{
+        raiseRecord404Error(req , res);
     }
 });
 
