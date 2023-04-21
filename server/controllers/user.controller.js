@@ -121,9 +121,10 @@ router.put('/resetPassword/:id' , authenticateJWT , validateDbId , async (req , 
 router.post('/profilePicture/:id' , authenticateJWT , upload.single("profilePicture")  , (req , res , next)=>{
     const file = req.file;
     console.log("hello" , file);
+    const serverHost = 'http://localhost:3001/uploadedImages/'
     const id = req.params.id;
     const filePath = file.path;
-    userCRUD.update(id , {profilePicture:filePath}).
+    userCRUD.update(id , {profilePicture:serverHost+file.filename}).
     then(user => {
         if(user){
         res.json(user)
@@ -143,7 +144,7 @@ router.get('/profilePicture/:id' , authenticateJWT , validateDbId , (req , res ,
         const serverHost = 'http://localhost:3001/uploadedImages/'
         const imagePath = path.parse(user.profilePicture);
         const imageFileName = imagePath.base;
-        const imageFileUrl = serverHost + imageFileName;
+        const imageFileUrl = user.profilePicture;
         console.log(imageFileUrl)
         console.log("File has been sent")
         res.json({
@@ -155,6 +156,8 @@ router.get('/profilePicture/:id' , authenticateJWT , validateDbId , (req , res ,
         }
     })
 });
+
+
     
 
 module.exports = router;

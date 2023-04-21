@@ -8,6 +8,7 @@ module.exports = mongoose.model('properties' , {
     bathrooms:{type:Number , required:true},
     listingType:{type:String , required:true},
     imageurls:[String],
+    surface:{type:Number , required:true},
     location:{type:String , required:true},
     creationDate:{type:Date , default: Date.now},
     userId:{type:mongoose.Schema.Types.ObjectId , ref:'users' , required:true}

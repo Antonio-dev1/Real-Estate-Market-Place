@@ -98,4 +98,39 @@ router.post('/upload' , authenticateJWT , upload.array('propertyPhotos' , 20) , 
     }
 });
 
+router.get('/userproperty/:id' , validateDbId , (req, res, next) => {
+    const userID = req.params.id;
+    propertyCRUD.getByUserId(userID).
+    then(property => {
+        if(property){
+            res.json({
+                message : 'Property found',
+                property : property
+            })
+        }
+    }).catch((err) => {
+        console.log(err , 'error')
+    })
+})
+
+router.post('/search' , (req , res , next) => {
+    const filterData = req.body;
+    propertyCRUD.filterProperties(filterData).
+    then(properties => {
+        if(properties){
+            res.json({
+                message : 'Properties found',
+                properties : properties
+            })
+        } else{
+            raiseRecord404Error(req , res);s
+        }
+        
+    }).catch(err => {
+        console.log(err , 'error')
+        next(err)
+    });
+});
+
+
 module.exports = router;
