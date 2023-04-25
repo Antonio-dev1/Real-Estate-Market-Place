@@ -64,7 +64,7 @@ router.delete('/:id' , authenticateJWT , validateDbId , (req , res , next)=>{
 
 router.put('/:id' , authenticateJWT , validateDbId , (req , res , next)=>{
     const id = req.params.id;
-    const property = rq.body;
+    const property = req.body;
     propertyCRUD.update(id , property).
     then(property => {
         if(property){
