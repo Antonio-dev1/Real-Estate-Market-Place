@@ -140,7 +140,8 @@ router.get('/profilePicture/:id' , authenticateJWT , validateDbId , (req , res ,
     const id = req.params.id
     userCRUD.getByID(id).
     then(user => {
-        if(user){
+        if(user.profilePicture){
+    
         const serverHost = 'http://localhost:3001/uploadedImages/'
         const imagePath = path.parse(user.profilePicture);
         const imageFileName = imagePath.base;
@@ -152,7 +153,7 @@ router.get('/profilePicture/:id' , authenticateJWT , validateDbId , (req , res ,
         })
         }
         else{
-            raiseRecord404Error(req , res);
+            res.json({error:'No profile picture found'})
         }
     })
 });

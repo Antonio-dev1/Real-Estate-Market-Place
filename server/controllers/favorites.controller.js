@@ -3,7 +3,7 @@ const router = express.Router();
 const Favorites = require('../models/favorites.model');
 const {generateCrudMethods} = require('../services/Favorites');
 const favoritesCrud = generateCrudMethods(Favorites);
-const {validateDbId , raiseeRecord404Error , errorHandler} = require('../middleware/routesErrorHandling');
+const {validateDbId , raiseRecord404Error , errorHandler} = require('../middleware/routesErrorHandling');
 const {authenticateJWT} = require('../middleware/jwtAuthentication');
 require('dotenv').config();
 
@@ -36,6 +36,7 @@ router.post('/' , authenticateJWT , (req , res , next) => {
     const favorite = req.body;
     favoritesCrud.create(favorite).
     then(favorite => {
+        console.log(favorite)
         res.json(favorite)
     }).catch(err => {
         res.json(err)
@@ -52,7 +53,7 @@ router.delete('/:id' , authenticateJWT , validateDbId , (req , res , next) => {
         res.json(favorite)
         }
         else{
-            raiseeRecord404Error(req , res);
+            raiseRecord404Error(req , res);
         }
     }).catch(err => {
         res.json(err)
