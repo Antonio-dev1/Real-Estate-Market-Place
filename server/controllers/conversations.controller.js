@@ -57,13 +57,25 @@ router.delete('/:id' , authenticateJWT , validateDbId , (req , res , next)=>{
     })
 });
 
-router.get('/user/:id' , authenticateJWT , validateDbId , (req , res)=>{
+router.get('/user/:id' , authenticateJWT , validateDbId , (req , res , next)=>{
     const id = req.params.id;
     conversationCRUD.getUserConversation(id).
     then(conversation => {
         res.json(conversation)
     }).catch(err => {
         console.log(err, 'error');
+        next(err);
+    })
+});
+
+router.get('/user/:id/:id2',authenticateJWT,validateDbId,(req,res,next)=>{
+    const id = req.params.id;
+    const id2 = req.params.id2;
+    conversationCRUD.getSpecificConversation(id,id2).
+    then(conversation=>{
+        res.json(conversation)
+    }).catch(err=>{
+        console.log(err,'error');
         next(err);
     })
 });

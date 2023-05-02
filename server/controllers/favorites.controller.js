@@ -27,7 +27,7 @@ router.get('/:id' , authenticateJWT , validateDbId , (req , res, next) => {
             res.json(favorite)
         } 
         else{
-            raiseeRecord404Error(req , res);
+            raiseRecord404Error(req , res);
         }
     })
 });
@@ -77,16 +77,14 @@ router.put('/:id' , authenticateJWT , validateDbId , (req , res , next) => {
 
 router.get('/user/:id' , authenticateJWT , validateDbId , (req , res , next) => {
     const userId = req.params.id;
-    favoritesCrud.getUserFavorites(userId).
-    then(favorites => {
+    favoritesCrud.getUserFavorites(userId).then(favorites => {
         res.json({
             message: 'Favorites retrieved successfully',
             favorites: favorites
-        }).
-        catch(err => {
+        })
+        }).catch(err => {
             res.json(err)
             console.log(err , 'error')
-        })
     })
 });
 

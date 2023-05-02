@@ -78,6 +78,20 @@ router.get('/user/:id/:id2' , authenticateJWT , validateDbId , (req , res , next
 
 });
 
+router.post('/chat/' , validateDbId , (req , res , next) => {
+    const convId = req.body.conversationId;
+    messageCrud.getByConvId(convId).then(messages => {
+        if(messages){
+            res.json(messages);
+        }
+        else{
+            raiseRecord404Error(req , res);
+        }
+    }).catch(err => {
+        next(err);
+    });
+});
+
 
 
 module.exports = router;
