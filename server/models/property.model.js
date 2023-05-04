@@ -11,5 +11,5 @@ module.exports = mongoose.model('properties' , {
     surface:{type:Number , required:true},
     location:{type:String , required:true},
     creationDate:{type:Date , default: Date.now},
-    userId:{type:mongoose.Schema.Types.ObjectId , ref:'users' , required:true}
+    userId:{type:mongoose.Schema.Types.ObjectId , ref:'users' , ondelete: 'CASCADE' , required:true}
 });

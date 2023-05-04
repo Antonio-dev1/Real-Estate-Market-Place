@@ -36,8 +36,12 @@ router.post('/' , authenticateJWT , (req , res , next)=> {
     const conversation = req.body;
     conversationCRUD.create(conversation).
     then(conversation => {res.json(conversation)}
-    ).catch(err => 
-        {next(err)});
+    ).catch(err => {
+        console.log(err, 'error');
+        res.json(err);
+    })
+
+        
 });
 
 

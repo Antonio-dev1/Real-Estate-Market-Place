@@ -29,9 +29,10 @@ io.on('connection' , (socket) => {
      socket.on("sendMessage" , ({senderId , receiverId , text}) => {
         const user = getUser(receiverId);
         console.log("This is the" , user)
+        console.log(text)
         if(user!== undefined){
         io.to(user.socketId).emit("getMessage" , {
-            senderId,text
+            senderId,text,
         });
     } else{
         console.log("user not online sending to db")

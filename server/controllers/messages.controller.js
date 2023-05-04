@@ -61,7 +61,9 @@ router.get('/user/:id' , authenticateJWT , validateDbId , (req , res , next) => 
 
 router.get('/user/:id/:id2' , authenticateJWT , validateDbId , (req , res , next) => {
     const id = req.params.id;
-    const id2 = req.params.id2; 
+    console.log(id);
+    const id2 = req.params.id2;
+    console.log(id2); 
     messageCrud.getConversation(id , id2).
     then(conversation => {
         if(conversation){
@@ -81,6 +83,20 @@ router.get('/user/:id/:id2' , authenticateJWT , validateDbId , (req , res , next
 router.post('/chat/' , validateDbId , (req , res , next) => {
     const convId = req.body.conversationId;
     messageCrud.getByConvId(convId).then(messages => {
+        if(messages){
+            res.json(messages);
+        }
+        else{
+            raiseRecord404Error(req , res);
+        }
+    }).catch(err => {
+        next(err);
+    });
+});
+
+router.get('/chat/:id' , validateDbId , (req , res , next) => {
+    const id = req.params.id;
+    messageCrud.getMessagesByConvId(id).then(messages => {
         if(messages){
             res.json(messages);
         }

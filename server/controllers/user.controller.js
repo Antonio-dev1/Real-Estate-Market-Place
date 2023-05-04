@@ -98,7 +98,7 @@ router.post('/login' , async (req , res  , next)=>{
     else{
         var token = jwt.sign({id:user._id} , process.env.JWT_SECRET , {expiresIn: 86400});
         user.token = token
-        res.status(200).json({token:token});
+        res.status(200).json({token:token , user:user});
     }
 });
 
